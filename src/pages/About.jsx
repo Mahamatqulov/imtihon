@@ -52,6 +52,9 @@ export default function About() {
       console.error(error.message);
     }
   };
+  const handleInvoiceUpdate = (updatedInvoice) => {
+    setInvoice(updatedInvoice);
+  };
 
   useEffect(() => {
     if (!invoice) {
@@ -113,6 +116,7 @@ export default function About() {
                   Edit
                 </Button>
               }
+              onUpdate={handleInvoiceUpdate}
             />
             <button
               onClick={() => setIsOpen(true)}

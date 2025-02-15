@@ -2,9 +2,9 @@
   "data": [
     {
       "id": "XM9141",
-      "createdAt": null,
+      "createdAt": "2025-02-15",
       "paymentDue": "2021-09-20",
-      "description": null,
+      "description": "dsfdsfd",
       "paymentTerms": "Net 30 Days",
       "clientName": "Alex Grim",
       "clientEmail": "a777777@mail.com",
@@ -16,7 +16,7 @@
         "country": "United Kingdom"
       },
       "clientAddress": {
-        "street": null,
+        "street": "adsdcascd",
         "city": "Bradford",
         "postCode": "BD1 9PB",
         "country": "United Kingdom"
@@ -197,66 +197,6 @@
         }
       ],
       "total": 3102.04
-    },
-    {
-      "id": "cc42",
-      "createdAt": "2025-02-15",
-      "paymentDue": "2025-02-20",
-      "description": "wqcewq",
-      "paymentTerms": null,
-      "clientName": "dsacdcdzd sa",
-      "clientEmail": "alexgrim@mail.com",
-      "status": "pending",
-      "senderAddress": {
-        "city": "wq",
-        "postCode": "dsadc",
-        "country": "dsadc"
-      },
-      "clientAddress": {
-        "street": "sedcqw",
-        "city": "adsac",
-        "postCode": "assadcsad",
-        "country": "dsadcas"
-      },
-      "items": [
-        {
-          "name": "Web Designqww",
-          "quantity": 11,
-          "price": 2333,
-          "total": 25663
-        }
-      ],
-      "total": 25663
-    },
-    {
-      "id": "5d60",
-      "createdAt": null,
-      "paymentDue": "2025-02-19",
-      "description": null,
-      "paymentTerms": "Net 30 Days",
-      "clientName": "dsacdcdzd sa",
-      "clientEmail": "11111122@mail.com",
-      "status": "paid",
-      "senderAddress": {
-        "city": "sdacd",
-        "postCode": "dsadc",
-        "country": "dsadc"
-      },
-      "clientAddress": {
-        "street": null,
-        "city": "wq",
-        "postCode": "qw",
-        "country": "dsadcas"
-      },
-      "items": [
-        {
-          "name": "dsadsa",
-          "quantity": 11,
-          "price": 3333,
-          "total": 36663
-        }
-      ],
-      "total": 36663
     }
   ]
 }

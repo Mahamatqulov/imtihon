@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { MdOutlineDelete } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 
-export default function InvoiceEdit({ trigger }) {
+export default function InvoiceEdit({ trigger, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
 
@@ -18,23 +18,23 @@ export default function InvoiceEdit({ trigger }) {
     const formData = new FormData(e.target);
 
     const updatedData = {
-      clientName: e.target.clientName.value,
-      clientEmail: e.target.clientEmail.value,
+      clientName: formData.get("clientName"),
+      clientEmail: formData.get("clientEmail"),
       senderAddress: {
-        street: e.target.senderStreet.value,
-        city: e.target.senderCity.value,
-        postCode: e.target.senderPostCode.value,
-        country: e.target.senderCountry.value,
+        street: formData.get("senderStreet"),
+        city: formData.get("senderCity"),
+        postCode: formData.get("senderPostCode"),
+        country: formData.get("senderCountry"),
       },
       clientAddress: {
-        street: e.target.street.value,
-        city: e.target.city.value,
-        postCode: e.target.postCode.value,
-        country: e.target.country.value,
+        street: formData.get("clientStreet"),
+        city: formData.get("clientCity"),
+        postCode: formData.get("clientPostCode"),
+        country: formData.get("clientCountry"),
       },
-      createdAt: e.target.invoiceDate.value,
-      paymentTerms: e.target.paymentTerms.value,
-      description: e.target.projectDescription.value,
+      createdAt: formData.get("invoiceDate"),
+      paymentTerms: formData.get("paymentTerms"),
+      description: formData.get("projectDescription"),
       items,
     };
 
@@ -53,6 +53,9 @@ export default function InvoiceEdit({ trigger }) {
       setItems(updatedData.items);
 
       alert(" Invoice muvaffaqiyatli yangilandi!");
+      if (onUpdate) {
+        onUpdate(result);
+      }
       setIsOpen(false);
     } catch (error) {
       console.error("Xatolik:", error);
@@ -60,35 +63,35 @@ export default function InvoiceEdit({ trigger }) {
     }
   }
   useEffect(() => {
-    async function fetchInvoice() {
+    const fetchInvoice = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:3000/data/${id}`);
+        const response = await fetch(`http://localhost:3000/data/${id}`, {});
         if (!response.ok) throw new Error("Ma'lumotni yuklashda xatolik!");
-
         const invoiceData = await response.json();
         setData(invoiceData);
         setItems(invoiceData.items);
       } catch (error) {
-        console.error(error.message);
+        if (error.name !== "AbortError") {
+          console.error(error.message);
+        }
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchInvoice();
   }, [id]);
 
   const addNewItem = (e) => {
     e.preventDefault();
-    setItems((prevItems) => [
-      ...prevItems,
-      { id: Date.now(), name: "", quantity: 1, price: 0, total: 0 },
-    ]);
+    setItems((prevItems) => [...prevItems, ...updatedData.items]);
   };
 
   const removeItem = (index) => {
-    setItems((prevItems) => prevItems.filter((_, i) => i !== index));
+    setItems((prevItems) =>
+      prevItems.filter((item) => item.id !== items[index].id)
+    );
   };
 
   if (loading) return <p className="text-center mt-5">Yuklanmoqda...</p>;
@@ -127,7 +130,7 @@ export default function InvoiceEdit({ trigger }) {
                 </span>
                 <input
                   type="text"
-                  name="senderAddress"
+                  name="senderStreet"
                   mainName="Street Address"
                   defaultValue={data?.senderAddress?.street}
                   className="input w-full  max-w-none mt-2 mb-5 border border-gray-300 dark:bg-[#252945] p-2 rounded-md"
@@ -140,7 +143,7 @@ export default function InvoiceEdit({ trigger }) {
                   </span>
                   <input
                     type="text"
-                    name="senderAddress"
+                    name="senderCity"
                     mainName="City"
                     defaultValue={data?.senderAddress?.city}
                     className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
@@ -152,8 +155,8 @@ export default function InvoiceEdit({ trigger }) {
                   </span>
                   <input
                     type="text"
-                    name="senderAddress"
-                    mainName=" Post Code"
+                    name="senderPostCode"
+                    mainName="Post Code"
                     defaultValue={data?.senderAddress?.postCode}
                     className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -164,8 +167,8 @@ export default function InvoiceEdit({ trigger }) {
                   </span>
                   <input
                     type="text"
-                    name="senderAddress"
-                    mainName=" Country"
+                    name="senderCountry"
+                    mainName="Country"
                     defaultValue={data?.senderAddress?.country}
                     className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -258,7 +261,8 @@ export default function InvoiceEdit({ trigger }) {
                 </span>
                 <input
                   type="date"
-                  name="invoiceData"
+                  name="invoiceDate"
+                  defaultValue={data?.createdAt}
                   mainName=" invoice Data"
                   className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                 />
