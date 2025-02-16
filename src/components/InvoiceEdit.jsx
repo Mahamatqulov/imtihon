@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { MdOutlineDelete } from "react-icons/md";
 import { Button } from "@/components/ui/button";
+import { Toaster, toast } from "sonner";
 
 export default function InvoiceEdit({ trigger, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,25 +18,67 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
 
     const formData = new FormData(e.target);
 
+    // const updatedData = {
+    //   clientName: formData.get("clientName"),
+    //   clientEmail: formData.get("clientEmail"),
+    //   senderAddress: {
+    //     street: formData.get("senderStreet"),
+    //     city: formData.get("senderCity"),
+    //     postCode: formData.get("senderPostCode"),
+    //     country: formData.get("senderCountry"),
+    //   },
+    //   clientAddress: {
+    //     street: formData.get("clientStreet"),
+    //     city: formData.get("clientCity"),
+    //     postCode: formData.get("clientPostCode"),
+    //     country: formData.get("clientCountry"),
+    //   },
+    //   createdAt: formData.get("invoiceDate"),
+    //   paymentTerms: formData.get("paymentTerms"),
+    //   description: formData.get("projectDescription"),
+    //   items,
+    // };
+
     const updatedData = {
-      clientName: formData.get("clientName"),
-      clientEmail: formData.get("clientEmail"),
+      clientName: formData.get("clientName") || data?.clientName || "",
+      clientEmail: formData.get("clientEmail") || data?.clientEmail || "",
       senderAddress: {
-        street: formData.get("senderStreet"),
-        city: formData.get("senderCity"),
-        postCode: formData.get("senderPostCode"),
-        country: formData.get("senderCountry"),
+        street:
+          formData.get("senderStreet") || data?.senderAddress?.street || "",
+        city: formData.get("senderCity") || data?.senderAddress?.city || "",
+        postCode:
+          formData.get("senderPostCode") || data?.senderAddress?.postCode || "",
+        country:
+          formData.get("senderCountry") || data?.senderAddress?.country || "",
       },
       clientAddress: {
-        street: formData.get("clientStreet"),
-        city: formData.get("clientCity"),
-        postCode: formData.get("clientPostCode"),
-        country: formData.get("clientCountry"),
+        street:
+          formData.get("clientStreet") || data?.clientAddress?.street || "",
+        city: formData.get("clientCity") || data?.clientAddress?.city || "",
+        postCode:
+          formData.get("clientPostCode") || data?.clientAddress?.postCode || "",
+        country:
+          formData.get("clientCountry") || data?.clientAddress?.country || "",
       },
-      createdAt: formData.get("invoiceDate"),
-      paymentTerms: formData.get("paymentTerms"),
-      description: formData.get("projectDescription"),
-      items,
+      createdAt:
+        formData.get("invoiceDate") ||
+        data?.createdAt ||
+        new Date().toISOString().split("T")[0],
+      paymentTerms:
+        formData.get("paymentTerms") || data?.paymentTerms || "Net 30 Days",
+      description:
+        formData.get("projectDescription") ||
+        data?.description ||
+        "No description",
+      items: items.map((item, index) => ({
+        id: item.id || Date.now() + index,
+        name: formData.get(`itemName-${index}`) || item.name || "New Item",
+        quantity: Number(formData.get(`qty-${index}`)) || item.quantity || 1,
+        price: Number(formData.get(`price-${index}`)) || item.price || 0,
+        total:
+          (Number(formData.get(`qty-${index}`)) || 1) *
+          (Number(formData.get(`price-${index}`)) || 0),
+      })),
     };
 
     try {
@@ -52,14 +95,14 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
       setData(result);
       setItems(updatedData.items);
 
-      alert(" Invoice muvaffaqiyatli yangilandi!");
+      toast.success("Malumotlar yangilandi!");
       if (onUpdate) {
         onUpdate(result);
       }
       setIsOpen(false);
     } catch (error) {
       console.error("Xatolik:", error);
-      alert("Xatolik yuz berdi!");
+      toast.error("Xatolik yuz berdi!");
     }
   }
   useEffect(() => {
@@ -98,6 +141,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
 
   return (
     <>
+      <Toaster richColors position="top-right" />
       <div onClick={() => setIsOpen(true)}>{trigger}</div>
 
       {isOpen && (
@@ -131,7 +175,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 <input
                   type="text"
                   name="senderStreet"
-                  mainName="Street Address"
                   defaultValue={data?.senderAddress?.street}
                   className="input w-full  max-w-none mt-2 mb-5 border border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                 />
@@ -144,7 +187,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   <input
                     type="text"
                     name="senderCity"
-                    mainName="City"
                     defaultValue={data?.senderAddress?.city}
                     className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -156,7 +198,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   <input
                     type="text"
                     name="senderPostCode"
-                    mainName="Post Code"
                     defaultValue={data?.senderAddress?.postCode}
                     className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -168,7 +209,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   <input
                     type="text"
                     name="senderCountry"
-                    mainName="Country"
                     defaultValue={data?.senderAddress?.country}
                     className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -185,7 +225,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 <input
                   type="text"
                   name="clientName"
-                  mainName=" Client's Name"
                   defaultValue={data?.clientName}
                   className="input w-full mb-5 border border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                 />
@@ -197,7 +236,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 <input
                   type="email"
                   name="clientEmail"
-                  mainName="Client's Email"
                   defaultValue={data?.clientEmail}
                   className="input w-full mt-2 mb-5 border border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                 />
@@ -208,8 +246,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 </span>
                 <input
                   type="text"
-                  name="clientAddress"
-                  mainName="clientAddress"
+                  name="clientStreet"
                   defaultValue={data?.clientAddress?.street}
                   className="input w-full mt-2 mb-5 border border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                 />
@@ -221,8 +258,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   </span>
                   <input
                     type="text"
-                    name="city"
-                    mainName="City"
+                    name="clientCity"
                     defaultValue={data?.clientAddress?.city}
                     className="input w-full border mt-2 mb-10 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -233,8 +269,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   </span>
                   <input
                     type="text"
-                    name="postCode"
-                    mainName="Post Code"
+                    name="clientPostCode"
                     defaultValue={data?.clientAddress?.postCode}
                     className="input w-full border mt-2 mb-10 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -245,8 +280,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   </span>
                   <input
                     type="text"
-                    name="country"
-                    mainName="Country"
+                    name="clientCountry"
                     defaultValue={data?.clientAddress?.country}
                     className="input w-full border mt-2 mb-10 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                   />
@@ -263,7 +297,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   type="date"
                   name="invoiceDate"
                   defaultValue={data?.createdAt}
-                  mainName=" invoice Data"
                   className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                 />
               </label>
@@ -274,7 +307,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 <select
                   defaultValue={data?.paymentTerms}
                   name="paymentTerms"
-                  mainName=" Payment Terms"
                   className="input w-full border mt-2 border-gray-300 dark:bg-[#252945] p-3 rounded-md"
                 >
                   <option>Net 30 Days</option>
@@ -293,7 +325,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 type="text"
                 name="description"
                 defaultValue={data?.description}
-                mainName="  Project Description"
                 className="input w-full mb-6 border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
               />
             </label>
@@ -302,11 +333,11 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
               <thead>
                 <tr className=" text-[#7E88C3] dark:text-white flex gap-10">
                   <th className="p-3">Item Name</th>
-                  <div className="ml-[115px] flex gap-10">
+                  <th className="ml-[115px] flex gap-10">
                     <th className="p-3">QTY</th>
                     <th className="p-3">Price</th>
                     <th className="p-3">Total</th>
-                  </div>
+                  </th>
                 </tr>
               </thead>
             </table>
@@ -324,14 +355,12 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                       type="text"
                       name="itemName"
                       defaultValue={item.name}
-                      mainName="Item name"
                       className="input border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                     />
 
                     <input
                       type="text"
                       name="qty"
-                      mainName="qty"
                       defaultValue={item.quantity}
                       className="input w-[30px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                     />
@@ -339,14 +368,12 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                     <input
                       type="text"
                       name="price"
-                      mainName="price"
-                      defaultValue={(item.price || 0).toFixed(2)}
+                      defaultValue={item.price.toFixed(2)}
                       className="input  w-[80px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                     />
 
                     <span className="">
-                      £
-                      {(Number(item.quantity) || 0) * (Number(item.price) || 0)}
+                      £{Number(item.quantity) * Number(item.price)}
                     </span>
                     <Button onClick={() => removeItem(index)} className=" ">
                       <MdOutlineDelete className="text-2xl" />

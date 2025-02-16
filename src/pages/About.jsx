@@ -253,28 +253,35 @@ export default function About() {
                 </tr>
               </thead>
               <tbody>
-                {invoice.items.length > 0 &&
+                {invoice?.items?.length > 0 ? (
                   invoice.items.map((value, index) => (
                     <tr
                       key={index}
                       className="bg-gray-100 dark:bg-[#252945] text-gray-900 dark:text-white"
                     >
-                      <td className="p-3 font-bold">{value.name}</td>
-                      <td className="p-3 font-extrabold text-gray-500 dark:text-[#DFE3FA]">
-                        {value.quantity}
+                      <td className="p-3 font-bold">
+                        {value.name || "Unknown"}
                       </td>
                       <td className="p-3 font-extrabold text-gray-500 dark:text-[#DFE3FA]">
-                        £{value.price}
+                        {value.quantity || 0}
+                      </td>
+                      <td className="p-3 font-extrabold text-gray-500 dark:text-[#DFE3FA]">
+                        £{value.price || 0}
                       </td>
                       <td className="p-3 font-extrabold">
                         £{(value.total || 0).toFixed(2)}
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center p-3 text-gray-500">
+                      No items found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
-
-            <div className="grid grid-cols-4 text-gray-900 mb-2"></div>
           </div>
 
           <div className="bg-[#373B53] text-white p-6 rounded-b-lg flex justify-between items-center">

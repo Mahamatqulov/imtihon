@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MdOutlineDelete } from "react-icons/md";
 import { useRef, useState } from "react";
 import { objectCreater } from "../lib/utils/object-create";
+import { Toaster, toast } from "sonner";
 
 export default function DrawerExample({ trigger }) {
   const drawerRef = useRef(null);
@@ -87,7 +88,7 @@ export default function DrawerExample({ trigger }) {
       }
 
       const result = await response.json();
-
+      toast.success("Yangi malumot qo'shildi!");
       console.log("Yangi Invoice qo‘shildi:", result);
       hanlReolaod();
     } catch (error) {
@@ -97,6 +98,7 @@ export default function DrawerExample({ trigger }) {
 
   return (
     <Sheet>
+      <Toaster richColors position="top-right" />
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent
         side="left"
