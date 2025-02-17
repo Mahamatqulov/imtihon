@@ -4,20 +4,28 @@ import { MdOutlineDelete } from "react-icons/md";
 import { useRef, useState } from "react";
 import { objectCreater } from "../lib/utils/object-create";
 import { Toaster, toast } from "sonner";
+import { validate } from "../lib/utils/validate";
 
 export default function DrawerExample({ trigger }) {
   const drawerRef = useRef(null);
   const formRef = useRef(null);
+
   const [items, setItems] = useState([]);
 
   const handleDiscard = () => {
     if (drawerRef.current) {
-      drawerRef.current.checked = false;
+      drawerRef.current.close();
     }
+
     if (formRef.current) {
       formRef.current.reset();
     }
+
     setItems([]);
+
+    document.querySelectorAll("input, select").forEach((input) => {
+      input.value = "";
+    });
   };
 
   const addNewItem = () => {
@@ -35,6 +43,7 @@ export default function DrawerExample({ trigger }) {
 
   async function getFormData(e) {
     e.preventDefault();
+
     const formData = new FormData(e.target);
 
     const data = Object.fromEntries(formData.entries());
@@ -73,6 +82,27 @@ export default function DrawerExample({ trigger }) {
     });
 
     console.log("Yangi Invoice:", invoiceData);
+
+    const errors = validate(invoiceData);
+
+    if (errors && Object.keys(errors).length > 0) {
+      const firstErrorField = Object.keys(errors)[0];
+      const firstErrorMessage = errors[firstErrorField];
+
+      if (firstErrorMessage) {
+        toast.warning(firstErrorMessage);
+      }
+
+      const input = document.querySelector(
+        `input[name="${firstErrorField}"], select[name="${firstErrorField}"]`
+      );
+
+      if (input) {
+        input.focus();
+      }
+
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:3000/data", {
@@ -308,14 +338,16 @@ export default function DrawerExample({ trigger }) {
                     />
 
                     <input
-                      type="text"
+                      type="number"
+                      min={0}
                       name="qty"
                       mainName="Qty."
                       className="input w-[40px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                     />
 
                     <input
-                      type="text"
+                      type="number"
+                      min={0}
                       name="price"
                       mainName="Price"
                       className="input  w-[60px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"

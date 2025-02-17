@@ -269,7 +269,7 @@ export default function About() {
                         £{value.price || 0}
                       </td>
                       <td className="p-3 font-extrabold">
-                        £{(value.total || 0).toFixed(2)}
+                        £{(value.total || 0).toFixed()}
                       </td>
                     </tr>
                   ))
@@ -287,7 +287,7 @@ export default function About() {
           <div className="bg-[#373B53] text-white p-6 rounded-b-lg flex justify-between items-center">
             <span className="text-lg font-semibold">Amount Due</span>
             <span className="text-2xl font-bold">
-              £{(invoice.total || 0).toFixed(2)}
+              £{(invoice.total || 0).toFixed()}
             </span>
           </div>
         </div>

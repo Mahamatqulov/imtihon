@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { MdOutlineDelete } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
+import { useMemo } from "react";
 
 export default function InvoiceEdit({ trigger, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,28 +18,6 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-
-    // const updatedData = {
-    //   clientName: formData.get("clientName"),
-    //   clientEmail: formData.get("clientEmail"),
-    //   senderAddress: {
-    //     street: formData.get("senderStreet"),
-    //     city: formData.get("senderCity"),
-    //     postCode: formData.get("senderPostCode"),
-    //     country: formData.get("senderCountry"),
-    //   },
-    //   clientAddress: {
-    //     street: formData.get("clientStreet"),
-    //     city: formData.get("clientCity"),
-    //     postCode: formData.get("clientPostCode"),
-    //     country: formData.get("clientCountry"),
-    //   },
-    //   createdAt: formData.get("invoiceDate"),
-    //   paymentTerms: formData.get("paymentTerms"),
-    //   description: formData.get("projectDescription"),
-    //   items,
-    // };
-
     const updatedData = {
       clientName: formData.get("clientName") || data?.clientName || "",
       clientEmail: formData.get("clientEmail") || data?.clientEmail || "",
@@ -70,15 +49,17 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
         formData.get("projectDescription") ||
         data?.description ||
         "No description",
+
       items: items.map((item, index) => ({
         id: item.id || Date.now() + index,
-        name: formData.get(`itemName-${index}`) || item.name || "New Item",
-        quantity: Number(formData.get(`qty-${index}`)) || item.quantity || 1,
-        price: Number(formData.get(`price-${index}`)) || item.price || 0,
+        name: formData.get(`itemName-${index}`) ?? item.name ?? "New Item",
+        quantity: Number(formData.get(`qty-${index}`)) ?? item.quantity ?? 1,
+        price: Number(formData.get(`price-${index}`)) ?? item.price ?? 0,
         total:
-          (Number(formData.get(`qty-${index}`)) || 1) *
-          (Number(formData.get(`price-${index}`)) || 0),
+          (Number(formData.get(`qty-${index}`)) ?? 1) *
+          (Number(formData.get(`price-${index}`)) ?? 0),
       })),
+      totalAmount: totalAmount,
     };
 
     try {
@@ -125,10 +106,39 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
 
     fetchInvoice();
   }, [id]);
+  const totalAmount = useMemo(() => {
+    return items.reduce((acc, item) => acc + (item.total ?? 0), 0);
+  }, [items]);
 
-  const addNewItem = (e) => {
-    e.preventDefault();
-    setItems((prevItems) => [...prevItems, ...updatedData.items]);
+  const addNewItem = () => {
+    setItems((prevItems) => [
+      ...prevItems,
+      {
+        id: Date.now(),
+        name: "",
+        quantity: 1,
+        price: 0,
+        total: 0,
+      },
+    ]);
+  };
+  const handleItemChange = (index, field, value) => {
+    setItems((prevItems) =>
+      prevItems.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              [field]: value,
+              total:
+                field === "quantity"
+                  ? Number(value) * item.price
+                  : field === "price"
+                  ? item.quantity * Number(value)
+                  : item.total,
+            }
+          : item
+      )
+    );
   };
 
   const removeItem = (index) => {
@@ -152,7 +162,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
       )}
 
       <div
-        className={`fixed top-0 left-0 h-full w-[800px] p-24 pr-0 bg-white dark:bg-[#1E2139] shadow-lg  transition-transform transform ${
+        className={`fixed top-0 left-0 h-full  max-w-3xl  p-24 pr-0 bg-white dark:bg-[#1E2139] shadow-lg transition-transform transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } z-10`}
       >
@@ -353,28 +363,42 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                   >
                     <input
                       type="text"
-                      name="itemName"
-                      defaultValue={item.name}
+                      name={`itemName-${index}`}
+                      value={item.name}
+                      onChange={(e) =>
+                        handleItemChange(index, "name", e.target.value)
+                      }
                       className="input border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                     />
 
                     <input
-                      type="text"
-                      name="qty"
-                      defaultValue={item.quantity}
-                      className="input w-[30px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
+                      type="number"
+                      name={`qty-${index}`}
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleItemChange(
+                          index,
+                          "quantity",
+                          Number(e.target.value)
+                        )
+                      }
+                      className="input w-[40px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                     />
 
                     <input
-                      type="text"
-                      name="price"
-                      defaultValue={item.price.toFixed(2)}
-                      className="input  w-[80px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
+                      type="number"
+                      name={`price-${index}`}
+                      value={item.price}
+                      onChange={(e) =>
+                        handleItemChange(index, "price", Number(e.target.value))
+                      }
+                      className="input w-[60px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
                     />
 
-                    <span className="">
-                      £{Number(item.quantity) * Number(item.price)}
+                    <span className="w-[60px] text-center dark:bg-[#252945] p-2 rounded-md">
+                      £{(item.total || 0).toFixed(2)}
                     </span>
+
                     <Button onClick={() => removeItem(index)} className=" ">
                       <MdOutlineDelete className="text-2xl" />
                     </Button>
@@ -382,7 +406,9 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 ))
               )}
             </div>
+
             <button
+              type="button"
               onClick={addNewItem}
               className="btn btn-block mt-4 dark:bg-[#252945] rounded-full py-3 font-extrabold  text-[#7E88C3] bg-[#F9FAFE] px-10 w-full mb-4"
             >

@@ -1,18 +1,19 @@
 import React from "react";
-import InvoiceDashboard from "./components/InvoiceDashboard";
-import Sidebar from "./components/Sidebar";
+import MainLayot from "./layout/MainLayot";
+
 import { ThemeProvider } from "@/components/theme-provider";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import About from "./pages/About";
 import Home from "./pages/Home";
 
-const router = createBrowserRouter([
+const routes = createBrowserRouter([
   {
     path: "/",
     element: (
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Sidebar />
-        <InvoiceDashboard />
+        <MainLayot>
+          <Home />
+        </MainLayot>
       </ThemeProvider>
     ),
   },
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={routes} />;
 }
 
 export default App;

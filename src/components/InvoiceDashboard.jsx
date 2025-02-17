@@ -53,13 +53,15 @@ export default function InvoiceDashboard() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">Invoices</h1>
-            <p className="text-muted-foreground">
-              There are {filteredInvoices.length} total invoices
+            <p className="flex gap-1 text-muted-foreground">
+              <span className="md:block hidden"> There are</span>
+              {filteredInvoices.length}
+              <span className="md:block hidden"> total </span> invoices
             </p>
           </div>
           <div className="flex items-center gap-4">
             <Select defaultValue="all" onValueChange={setFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="max-w-[180px]">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
@@ -79,8 +81,8 @@ export default function InvoiceDashboard() {
                   >
                     <div className="bg-white rounded-full p-[10px]">
                       <Plus className="h-4 w-4 text-[#7C5DFA]" />
-                    </div>{" "}
-                    New Invoice
+                    </div>
+                    New<span className="md:block hidden">Invoice</span>
                   </Button>
                 }
               />
@@ -101,13 +103,11 @@ export default function InvoiceDashboard() {
                     <div className="flex items-center justify-between">
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
                         <div>
-                          <span className="text-[#7E88C3] dark:text-[#DFE3FA] font-bold text-[15px] w-[31px]">
-                            #
-                          </span>
                           <span className="text-[#0C0E16] text-xl font-bold dark:text-white">
-                            {invoice.id}
+                            #{invoice.id}
                           </span>
                         </div>
+
                         <div className="text-[#888EB0] text-md font-normal">
                           <span>Due </span>
                           {invoice.paymentDue
@@ -136,11 +136,11 @@ export default function InvoiceDashboard() {
                         <button
                           className={`px-7 py-2 capitalize w-[115px] bg-opacity-50 text-center rounded-md font-extrabold text-md flex gap-2 items-center justify-center
                 ${
-                  invoice.status === "paid" ? "bg-green-100 text-[#33D69F]" : ""
+                  invoice.status === "paid" ? "bg-green-200 text-[#33D69F]" : ""
                 }
                 ${
                   invoice.status === "pending"
-                    ? "bg-orange-100 text-[#FF8F00]"
+                    ? "bg-orange-200 text-[#FF8F00]"
                     : ""
                 }
                 ${
@@ -162,7 +162,7 @@ export default function InvoiceDashboard() {
 
                           {invoice.status}
                         </button>
-                        <ChevronRight className="text-[#7C5DFA]" />
+                        <ChevronRight className="text-[#7C5DFA] md:block hidden" />
                       </div>
                     </div>
                   </div>
