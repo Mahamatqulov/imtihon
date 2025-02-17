@@ -17,21 +17,6 @@ export default function Notfound() {
   const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [filter, setFilter] = useState("all");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:3000/data");
-  //       if (!response.ok) throw new Error("Failed to fetch data");
-  //       const data = await response.json();
-  //       setInvoices(data);
-  //       setFilteredInvoices(data);
-  //     } catch (error) {
-  //       console.error("Error fetching invoices:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
   useEffect(() => {
     if (filter === "all") {
       setFilteredInvoices(invoices);

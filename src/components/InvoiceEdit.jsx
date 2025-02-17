@@ -359,7 +359,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                 items.map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-2 rounded-lg w-full"
+                    className="flex items-center justify-around  rounded-lg "
                   >
                     <input
                       type="text"
@@ -382,7 +382,7 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                           Number(e.target.value)
                         )
                       }
-                      className="input w-[40px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
+                      className="input  border max-w-[50px] mt-2 border-gray-300 dark:bg-[#252945] px-3 py-2 rounded-md"
                     />
 
                     <input
@@ -392,10 +392,10 @@ export default function InvoiceEdit({ trigger, onUpdate }) {
                       onChange={(e) =>
                         handleItemChange(index, "price", Number(e.target.value))
                       }
-                      className="input w-[60px] border mt-2 border-gray-300 dark:bg-[#252945] p-2 rounded-md"
+                      className="input  border max-w-[90px] mt-2 border-gray-300 dark:bg-[#252945] px-4 py-2 rounded-md"
                     />
 
-                    <span className="w-[60px] text-center dark:bg-[#252945] p-2 rounded-md">
+                    <span className=" text-center dark:bg-[#252945] p-2 rounded-md">
                       £{(item.total || 0).toFixed(2)}
                     </span>
 

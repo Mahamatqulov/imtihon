@@ -36,7 +36,7 @@
       "createdAt": "2021-08-21",
       "paymentDue": "2021-09-20",
       "description": "Graphic Design",
-      "paymentTerms": 30,
+      "paymentTerms": "Net 30 Days",
       "clientName": "Alex Grim",
       "clientEmail": "alexgrim@mail.com",
       "status": "pending",
@@ -54,19 +54,22 @@
       },
       "items": [
         {
+          "id": 1739784211547,
           "name": "Banner Design",
           "quantity": 1,
-          "price": 156.0,
-          "total": 156.0
+          "price": 157,
+          "total": 157
         },
         {
+          "id": 1739784211548,
           "name": "Email Design",
           "quantity": 2,
-          "price": 200.0,
-          "total": 400.0
+          "price": 200,
+          "total": 400
         }
       ],
-      "total": 556.0
+      "total": 556,
+      "totalAmount": 557
     },
     {
       "id": "RG0314",
@@ -131,43 +134,6 @@
       "total": 102.04
     },
     {
-      "id": "AA1449",
-      "createdAt": "2021-10-7",
-      "paymentDue": "2021-10-14",
-      "description": "Re-branding",
-      "paymentTerms": 7,
-      "clientName": "Mellisa Clarke",
-      "clientEmail": "mellisa.clarke@example.com",
-      "status": "pending",
-      "senderAddress": {
-        "street": "19 Union Terrace",
-        "city": "London",
-        "postCode": "E1 3EZ",
-        "country": "United Kingdom"
-      },
-      "clientAddress": {
-        "street": "46 Abbey Row",
-        "city": "Cambridge",
-        "postCode": "CB5 6EG",
-        "country": "United Kingdom"
-      },
-      "items": [
-        {
-          "name": "New Logo",
-          "quantity": 1,
-          "price": 1532.33,
-          "total": 1532.33
-        },
-        {
-          "name": "Brand Guidelines",
-          "quantity": 1,
-          "price": 2500.0,
-          "total": 2500.0
-        }
-      ],
-      "total": 4032.33
-    },
-    {
       "id": "TY9141",
       "createdAt": "2021-10-01",
       "paymentDue": "2021-10-31",
@@ -203,9 +169,9 @@
       "createdAt": "2021-11-05",
       "paymentDue": "2021-11-12",
       "description": "Logo Re-design",
-      "paymentTerms": 7,
+      "paymentTerms": "Net 30 Days",
       "clientName": "Anita Wainwright",
-      "clientEmail": "",
+      "clientEmail": "dsadc@gmail.com",
       "status": "draft",
       "senderAddress": {
         "street": "19 Union Terrace",
@@ -214,20 +180,22 @@
         "country": "United Kingdom"
       },
       "clientAddress": {
-        "street": "",
-        "city": "",
-        "postCode": "",
-        "country": ""
+        "street": "asd",
+        "city": "Bradfordsad",
+        "postCode": "BD1 9PBsad",
+        "country": "sdas"
       },
       "items": [
         {
+          "id": 1739783747679,
           "name": "Logo Re-design",
           "quantity": 1,
           "price": 3102.04,
           "total": 3102.04
         }
       ],
-      "total": 3102.04
+      "total": 3102.04,
+      "totalAmount": 3102.04
     }
   ]
 }
