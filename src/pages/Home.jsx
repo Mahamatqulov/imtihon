@@ -1,6 +1,6 @@
 import React from "react";
 import InvoiceDashboard from "../components/InvoiceDashboard";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 
 function Home() {
   return (
