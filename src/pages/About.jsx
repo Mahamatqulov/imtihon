@@ -2,7 +2,7 @@ import { Link, useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { GoChevronLeft } from "react-icons/go";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 
 import { Button } from "@/components/ui/button";
 import InvoiceEdit from "../components/InvoiceEdit";
