@@ -39,7 +39,7 @@
       "paymentTerms": "Net 30 Days",
       "clientName": "Alex Grim",
       "clientEmail": "alexgrim@mail.com",
-      "status": "pending",
+      "status": "paid",
       "senderAddress": {
         "street": "19 Union Terrace",
         "city": "London",
